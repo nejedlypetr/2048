@@ -1,7 +1,6 @@
 #include <iostream>
 #include <sstream>
 #include <iomanip>
-#include <vector>
 
 #include "window.hpp"
 
@@ -24,11 +23,13 @@ std::string Window::drawTitle() {
     return title.str();
 }
 
-std::string Window::drawStats(size_t moves, size_t score) {
+std::string Window::drawStats(size_t moves, size_t score, size_t minutes, size_t seconds) {
     std::stringstream stats;
     stats << COLOR_MAGENTA << ANSI_BOLD;
     stats << "SCORE: " << score << std::endl << "\r";
     stats << "MOVES: " << moves << std::endl << "\r";
+    stats << "TIME: " << std::setw(2) << std::setfill('0') << minutes << ":";
+    stats << std::setw(2) << std::setfill('0') << seconds << "s" << std::endl << "\r";
     stats << ANSI_COLOR_RESET << ANSI_B0LD_RESET;
     return stats.str();
 }
@@ -81,13 +82,13 @@ std::string Window::drawText(bool gameOver) {
     return text.str();
 }
 
-void Window::renderWindow(size_t size, bool gameOver, size_t moves, size_t score) {
+void Window::renderWindow(size_t size, bool gameOver, size_t moves, size_t score, size_t minutes, size_t seconds) {
     std::stringstream buffer;
 
     buffer << ANSI_CLEAR << ANSI_COLOR_RESET;
     buffer << drawTitle() << std::endl << "\r";
     buffer << drawBoard(size) << std::endl << "\r";
-    buffer << drawStats(moves, score) << std::endl << "\r";
+    buffer << drawStats(moves, score, minutes, seconds) << std::endl << "\r";
     buffer << drawText(gameOver) << std::endl << "\r";
 
     outputStream << buffer.str();
