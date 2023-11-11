@@ -1,4 +1,4 @@
-#include "argumentsparser.hpp"
+#include "headers/argumentsparser.hpp"
 
 #include <string>
 
@@ -6,7 +6,6 @@ void set_raw(bool set) {
     if (set) system("stty raw");
     else system("stty -raw");
 }
-
 
 Arguments ArgumentsParser::parseArguments(int argc, char **argv) {
     auto parsedArguments = Arguments{ARG_SIZE_DEFAULT};

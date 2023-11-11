@@ -7,8 +7,9 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_executable(
         2048 main.cpp
-        argumentsparser.cpp argumentsparser.hpp
-        window.cpp window.hpp
+        argumentsparser.cpp headers/argumentsparser.hpp
+        graphics.cpp headers/graphics.hpp
+        game.cpp headers/game.hpp
 )
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
