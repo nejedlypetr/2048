@@ -96,7 +96,6 @@ private:
     size_t minutes = 0;
 
     void game_mechanics() {
-        moves += 1;
         move();
         generate_number();
     }
@@ -189,6 +188,24 @@ private:
         transposeBoard();
     }
 
+    bool isGameOver() {
+        for (size_t row = 0; row < board.size(); row++) {
+            for (size_t col = 0; col < board[row].size() - 1; col++) {
+                if (board[row][col] == board[row][col + 1]) {
+                    return false;
+                }
+            }
+        }
+        for (size_t row = 0; row < board.size(); row++) {
+            for (size_t col = 0; col < board[row].size() - 1; col++) {
+                if (board[col][row] == board[col +1][row]) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     void generate_number() {
         std::vector<std::pair<size_t, size_t>> emptyCells;
 
@@ -202,9 +219,11 @@ private:
         }
 
         if (emptyCells.empty()) {
-            gameOver = true;
+            gameOver = isGameOver();
             return;
         }
+
+        moves += 1;
 
         std::pair<size_t, size_t> selectedCell = emptyCells[random(0, emptyCells.size()-1)];
         size_t value = (random(1, 3) == 1) ? 4 : 2;
