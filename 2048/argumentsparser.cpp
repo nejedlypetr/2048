@@ -8,20 +8,19 @@ void set_raw(bool set) {
 }
 
 Arguments ArgumentsParser::parseArguments(int argc, char **argv) {
-    auto parsedArguments = Arguments{ARG_SIZE_DEFAULT};
+    auto parsedArguments = Arguments{ARG_SIZE_DEFAULT, false};
 
     for (int i = 1; i < argc; i += 2) {
-        int tmp;
-        if (std::strlen(argv[i]) > 1)
-            switch (argv[i][1]) {
-                case 's':
-                    if ((std::strlen(argv[i]) <= 2 || !std::strcmp(argv[i], "-size")) &&
-                        strToInt(&tmp, argv[i + 1]) >= 0 && tmp >= ARG_SIZE_MIN && tmp <= ARG_SIZE_MAX)
-                        parsedArguments.size = tmp;
-                    break;
-                default:
-                    break;
+        if (std::strlen(argv[i]) > 1) {
+            if (std::strcmp(argv[i], "--size") == 0 || std::strcmp(argv[i], "-s") == 0) {
+                int tmp;
+                if (strToInt(&tmp, argv[i + 1]) >= 0 && tmp >= ARG_SIZE_MIN && tmp <= ARG_SIZE_MAX) {
+                    parsedArguments.size = tmp;
+                }
+            } else if (std::strcmp(argv[i], "--help") == 0) {
+                parsedArguments.helpRequested = true;
             }
+        }
     }
 
     return parsedArguments;

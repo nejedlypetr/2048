@@ -4,20 +4,28 @@
 #include <chrono>
 #include <thread>
 
+#ifndef UNIT_TESTING
 int main(int argc, char *argv[]) {
-    auto inputThread = [](game& game) {
+    auto arguments = ArgumentsParser::parseArguments(argc, argv);
+
+    if (arguments.helpRequested) {
+        Graphics::printHelpInfo();
+        return 0;
+    }
+
+    auto inputThread = [](Game& game) {
         while (!game.get_quit()) {
             game.input();
         }
     };
 
-    auto computeThread = [](game& game) {
+    auto computeThread = [](Game& game) {
         while (!game.get_quit()) {
             game.calculate();
         }
     };
 
-    auto outputThread = [](game& game) {
+    auto outputThread = [](Game& game) {
         while (!game.get_quit()) {
             game.output();
         }
@@ -25,8 +33,7 @@ int main(int argc, char *argv[]) {
 
     set_raw(true);
 
-    auto arguments = ArgumentsParser::parseArguments(argc, argv);
-    game game(arguments.size);
+    Game game(arguments.size);
 
     std::thread t1(inputThread, std::ref(game));
     std::thread t2(computeThread, std::ref(game));
@@ -40,3 +47,5 @@ int main(int argc, char *argv[]) {
 
     return 0;
 }
+
+#endif

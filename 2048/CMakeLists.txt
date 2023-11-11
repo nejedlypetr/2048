@@ -5,8 +5,8 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-add_executable(
-        2048 main.cpp
+add_executable(2048
+        main.cpp
         argumentsparser.cpp headers/argumentsparser.hpp
         graphics.cpp headers/graphics.hpp
         game.cpp headers/game.hpp
@@ -22,4 +22,12 @@ endif()
 if (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     target_compile_options(2048 PRIVATE /W4)
 endif()
+
+# Tests
+add_executable(2048Tests
+        tests/tests.cpp
+        graphics.cpp headers/graphics.hpp
+        game.cpp headers/game.hpp
+)
+target_compile_definitions(2048Tests PRIVATE UNIT_TESTING)
 

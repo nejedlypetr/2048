@@ -6,12 +6,18 @@
 #include <thread>
 #include <random>
 
-game::game(size_t size) : size(size), board(size, std::vector<size_t>(size, 0)), window(std::make_unique<Graphics>(std::cout)) {
+Game::Game(size_t size) : size(size), board(size, std::vector<size_t>(size, 0)), window(std::make_unique<Graphics>(std::cout)) {
     newGame();
     window->renderWindow(board, size, gameOver, moves, score, minutes, seconds);
 };
 
-void game::input() {
+
+Game::Game(const std::vector<std::vector<size_t>>& board) : board(board) {
+    size = board.size();
+};
+
+
+void Game::input() {
     std::unique_lock<std::mutex> lock(mutex);
     lock.unlock();
 
@@ -47,14 +53,14 @@ void game::input() {
     cv.notify_one();
 }
 
-void game::output() {
+void Game::output() {
     std::unique_lock<std::mutex> lock(mutex);
     cv.wait(lock);
 
     window->renderWindow(board, size, gameOver, moves, score, minutes, seconds);
 }
 
-void game::calculate() {
+void Game::calculate() {
     if (gameOver) {
         return;
     }
@@ -71,16 +77,16 @@ void game::calculate() {
     cv.notify_all();
 }
 
-bool game::get_quit() const {
+bool Game::get_quit() const {
     return quit;
 }
 
-void game::game_mechanics() {
+void Game::game_mechanics() {
     move();
     generate_number();
 }
 
-void game::move() {
+void Game::move() {
     switch (direction) {
         case UP: {
             moveUp();
@@ -101,7 +107,7 @@ void game::move() {
     }
 }
 
-void game::moveLeft() {
+void Game::moveLeft() {
     for (size_t row = 0; row < size; row++) {
         // Remove zeros
         board[row].erase(
@@ -111,7 +117,7 @@ void game::moveLeft() {
 
         // Merge equal values
         if (board[row].size() > 1) {
-            for (size_t col = 0; col < board[row].size() - 1; col++) {
+            for (size_t col = 0; col + 1 < board[row].size(); col++) {
                 if (board[row][col] == board[row][(col + 1)]) {
                     board[row][col] *= 2;
                     board[row][col + 1] = 0;
@@ -132,7 +138,7 @@ void game::moveLeft() {
     }
 }
 
-void game::moveRight() {
+void Game::moveRight() {
     for (size_t row = 0; row < size; row++) {
         std::reverse(board[row].begin(), board[row].end());
     }
@@ -142,7 +148,7 @@ void game::moveRight() {
     }
 }
 
-void game::transposeBoard() {
+void Game::transposeBoard() {
     size_t boardSize = board.size();
     std::vector<std::vector<size_t>> transposedBoard(boardSize, std::vector<size_t>(boardSize, 0));
 
@@ -156,19 +162,19 @@ void game::transposeBoard() {
     board = transposedBoard;
 }
 
-void game::moveUp() {
+void Game::moveUp() {
     transposeBoard();
     moveLeft();
     transposeBoard();
 }
 
-void game::moveDown() {
+void Game::moveDown() {
     transposeBoard();
     moveRight();
     transposeBoard();
 }
 
-bool game::isGameOver() {
+bool Game::isGameOver() {
     for (size_t row = 0; row < board.size(); row++) {
         for (size_t col = 0; col < board[row].size() - 1; col++) {
             if (board[row][col] == board[row][col + 1]) {
@@ -186,7 +192,7 @@ bool game::isGameOver() {
     return true;
 }
 
-void game::newGame() {
+void Game::newGame() {
     gameOver = false;
     score = 0;
     seconds = 0;
@@ -201,7 +207,7 @@ void game::newGame() {
     moves = 0;
 }
 
-void game::generate_number() {
+void Game::generate_number() {
     std::vector<std::pair<size_t, size_t>> emptyCells;
 
     for (size_t r = 0; r < size; ++r) {
@@ -227,7 +233,7 @@ void game::generate_number() {
     board[selectedCell.first][selectedCell.second] = value;
 }
 
-size_t game::random(size_t bottomLimit, size_t upperLimit) {
+size_t Game::random(size_t bottomLimit, size_t upperLimit) {
     std::random_device rd;
     std::mt19937 generator(rd());
     std::uniform_int_distribution<size_t> distribution(bottomLimit, upperLimit);

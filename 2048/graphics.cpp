@@ -3,6 +3,7 @@
 #include <iomanip>
 
 #include "headers/graphics.hpp"
+#include "headers/argumentsparser.hpp"
 
 Graphics::Graphics(std::ostream &outputStream) : outputStream(outputStream) {}
 
@@ -102,19 +103,6 @@ std::string Graphics::drawText(bool gameOver) {
         text << ANSI_COLOR_RESET << ANSI_B0LD_RESET;
     }
 
-//R"(
-//
-//   _____          __  __ ______    ______      ________ _____
-//  / ____|   /\   |  \/  |  ____|  / __ \ \    / /  ____|  __ \
-// | |  __   /  \  | \  / | |__    | |  | \ \  / /| |__  | |__) |
-// | | |_ | / /\ \ | |\/| |  __|   | |  | |\ \/ / |  __| |  _  /
-// | |__| |/ ____ \| |  | | |____  | |__| | \  /  | |____| | \ \
-//  \_____/_/    \_\_|  |_|______|  \____/   \/   |______|_|  \_\
-//
-//
-//
-//)"
-
     return text.str();
 }
 
@@ -128,4 +116,11 @@ void Graphics::renderWindow(const std::vector<std::vector<size_t>>& board, size_
     buffer << drawText(gameOver) << std::endl << "\r";
 
     outputStream << buffer.str();
+}
+
+void Graphics::printHelpInfo() {
+    std::cout << "Usage: 2048 [--size <size>] [--help]" << std::endl;
+    std::cout << "Options:" << std::endl;
+    std::cout << "  --size <size>  Set the size parameter for the program (default: " << ARG_SIZE_DEFAULT << ", min: " << ARG_SIZE_MIN << ", max: " << ARG_SIZE_MAX << ")." << std::endl;
+    std::cout << "  --help         Display this help information." << std::endl;
 }
