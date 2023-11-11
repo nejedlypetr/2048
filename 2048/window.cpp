@@ -34,33 +34,37 @@ std::string Window::drawStats(size_t moves, size_t score, size_t minutes, size_t
     return stats.str();
 }
 
-std::string Window::drawBoard(size_t size) {
-    std::stringstream board;
+std::string Window::drawBoard(const std::vector<std::vector<size_t>>& board, size_t size) {
+    std::stringstream output;
 
     // Draw top border
-    board << "+";
+    output << "+";
     for (size_t column = 0; column < size; ++column) {
-        board << "--------+";
+        output << "--------+";
     }
-    board << std::endl << "\r";
+    output << std::endl << "\r";
 
     // Draw table content
     for (size_t row = 0; row < size; ++row) {
         for (size_t column = 0; column < size; ++column) {
-            board << "|" << std::setw(7) << "123456" << " ";
+            std::string number;
+            if (board[row][column] != 0) {
+                number = std::to_string(board[row][column]);
+            }
+            output << "|" << std::setw(7) << number << " ";
         }
-        board << "|" << std::endl << "\r";
+        output << "|" << std::endl << "\r";
 
         // Draw row separator
-        board << "+";
+        output << "+";
         for (size_t column = 0; column < size; ++column) {
-            board << "--------+";
+            output << "--------+";
         }
-        board << std::endl << "\r";
+        output << std::endl << "\r";
     }
 
 
-    return board.str();
+    return output.str();
 }
 
 std::string Window::drawText(bool gameOver) {
@@ -82,12 +86,12 @@ std::string Window::drawText(bool gameOver) {
     return text.str();
 }
 
-void Window::renderWindow(size_t size, bool gameOver, size_t moves, size_t score, size_t minutes, size_t seconds) {
+void Window::renderWindow(const std::vector<std::vector<size_t>>& board, size_t size, bool gameOver, size_t moves, size_t score, size_t minutes, size_t seconds) {
     std::stringstream buffer;
 
     buffer << ANSI_CLEAR << ANSI_COLOR_RESET;
     buffer << drawTitle() << std::endl << "\r";
-    buffer << drawBoard(size) << std::endl << "\r";
+    buffer << drawBoard(board, size) << std::endl << "\r";
     buffer << drawStats(moves, score, minutes, seconds) << std::endl << "\r";
     buffer << drawText(gameOver) << std::endl << "\r";
 

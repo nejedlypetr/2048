@@ -22,14 +22,14 @@ public:
     /*
      * Redraw entire terminal window
      */
-    void renderWindow(size_t size, bool gameOver, size_t moves, size_t score, size_t minutes, size_t seconds);
+    void renderWindow(const std::vector<std::vector<size_t>>& board, size_t size, bool gameOver, size_t moves, size_t score, size_t minutes, size_t seconds);
 
 private:
     std::ostream &outputStream;
 
     std::string drawTitle();
     std::string drawStats(size_t moves, size_t score, size_t minutes, size_t seconds);
-    std::string drawBoard(size_t size);
+    std::string drawBoard(const std::vector<std::vector<size_t>>& board, size_t size);
     std::string drawText(bool gameOver);
 };
 
