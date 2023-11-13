@@ -5,8 +5,10 @@
 #include <chrono>
 #include <thread>
 #include <random>
+#include <mutex>
+#include <algorithm>
 
-Game::Game(size_t size) : size(size), board(size, std::vector<size_t>(size, 0)), window(std::make_unique<Graphics>(std::cout)) {
+Game::Game(size_t size) : window(std::make_unique<Graphics>(std::cout)), board(size, std::vector<size_t>(size, 0)), size(size) {
     newGame();
     window->renderWindow(board, size, gameOver, moves, score, minutes, seconds);
 };

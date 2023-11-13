@@ -1,6 +1,7 @@
 #include <iostream>
 #include <sstream>
 #include <iomanip>
+#include <cmath>
 
 #include "headers/graphics.hpp"
 #include "headers/argumentsparser.hpp"

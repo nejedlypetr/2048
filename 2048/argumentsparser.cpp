@@ -1,6 +1,8 @@
 #include "headers/argumentsparser.hpp"
 
 #include <string>
+#include <cstring>
+#include <stdexcept>
 
 void set_raw(bool set) {
     if (set) system("stty raw");

@@ -5,6 +5,8 @@
 
 #include <chrono>
 #include <thread>
+#include <mutex>
+#include <condition_variable>
 
 #define KEY_UP 'A'
 #define KEY_LEFT 'D'
@@ -60,11 +62,10 @@ private:
     bool quit = false;
     bool gameOver = false;
     Direction direction = UP;
-    size_t score = 0;   // current Game score
+    size_t score = 0;   // current game score
     size_t moves = 0;   // total number of moves
     size_t seconds = 0;
     size_t minutes = 0;
-    // board size - number of rows and columns
     std::unique_ptr<Graphics> window;
     std::mutex mutex;
     std::condition_variable cv;
