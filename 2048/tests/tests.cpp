@@ -1,6 +1,6 @@
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
-#include "../headers/Game.hpp"
+#include "../headers/game.hpp"
 
 class GameTester : public Game {
 public:
