@@ -3,7 +3,7 @@
 Welcome to the 2048 game written in C++. This repository contains the source code for a console-based implementation of the popular 2048 game.
 
 <p align="center">
-    <img align="center" width=512 alt="2048 game demo" src="2048/assets/demo.gif">
+    <img align="center" width=512 alt="2048 game demo" src="assets/demo.gif">
 </p>
 
 ## Game controls
@@ -17,7 +17,7 @@ Welcome to the 2048 game written in C++. This repository contains the source cod
 To compile the project, follow these steps:
 
 ```
-cd pcc-nejedly/2048/
+cd 2048
 
 cmake -Bcmake-build-debug -H. -DCMAKE_BUILD_TYPE=Debug
 cmake --build cmake-build-debug
